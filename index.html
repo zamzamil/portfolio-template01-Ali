@@ -216,6 +216,7 @@
     aspect-ratio:4 / 5;
     cursor:pointer;
     overflow:hidden;
+    user-select:none;
   }
 
   .frame:hover{
@@ -259,6 +260,7 @@
     opacity:0;
     transition:opacity .2s;
     z-index:2;
+    pointer-events:none;
   }
 
   .frame:hover .frame-hint{
@@ -278,32 +280,8 @@
   /* =========================================================
   실제 이미지 여러 장 넣기
 
-  예:
-
-  <div class="frame image-frame" data-index="0">
-
-    <img
-      src="pyomain01.jpg"
-      alt="Closit image 1"
-      class="project-image active"
-    >
-
-    <img
-      src="pyomain02.jpg"
-      alt="Closit image 2"
-      class="project-image"
-    >
-
-    <div class="frame-hint">
-      Click to advance →
-    </div>
-
-  </div>
-
-  중요:
-  - 첫 번째 이미지만 active 붙이기
-  - 두 번째부터는 active 없이 project-image만
-  - 이미지 3장, 4장도 같은 방식으로 계속 추가 가능
+  첫 번째 이미지만 active
+  나머지는 project-image만 넣으면 됩니다.
   ========================================================= */
 
   .image-frame{
@@ -406,18 +384,6 @@
 <body>
 
 <!-- =========================================================
-콘텐츠 수정 핵심 가이드
-
-1. 사이트 이름
-2. 왼쪽 메뉴
-3. Information 소개
-4. 프로젝트 제목
-5. 프로젝트 정보
-6. 프로젝트 설명
-7. 이미지
-========================================================= -->
-
-<!-- =========================================================
 [A. 왼쪽 메뉴]
 ========================================================= -->
 
@@ -425,7 +391,6 @@
 
   <div>
 
-    <!-- 사이트 이름 -->
     <div class="brand">
       Pyo Studio
     </div>
@@ -436,11 +401,6 @@
 
     <nav>
       <ul id="navList">
-
-        <!--
-        data-target="p01"은
-        아래 프로젝트의 id="p01"과 같아야 합니다.
-        -->
 
         <li>
           <button data-target="p00" class="active">
@@ -530,14 +490,12 @@
           Contact
         </h3>
 
-        <!-- 이메일: href와 보이는 주소 둘 다 수정 -->
         <div>
           <a href="mailto:10069268@network.rca.ac.uk">
             10069268@network.rca.ac.uk
           </a>
         </div>
 
-        <!-- # 부분에 실제 Instagram 주소 넣기 -->
         <div>
           <a href="#">
             Instagram — @py0seon
@@ -555,12 +513,6 @@
 
 <!-- =========================================================
 [C. PROJECT 01 — CLOSIT]
-
-data-images:
-실제 이미지 아래에 표시되는 캡션입니다.
-
-이미지 2장이면 캡션도 2개,
-3장이면 3개 넣는 것을 추천합니다.
 ========================================================= -->
 
 <section
@@ -629,38 +581,35 @@ data-images:
       </div>
 
       <!-- =====================================================
-      프로젝트 01 이미지
+      프로젝트 이미지
 
-      이미지 2장:
-      pyomain01.jpg
-      pyomain02.jpg
+      오른쪽 절반 클릭 = 다음
+      왼쪽 절반 클릭 = 이전
 
-      이미지 한 장만 사용:
-      두 번째 img 삭제
+      첫 이미지에서 왼쪽 클릭
+      → 이전 프로젝트
 
-      이미지 3장 사용:
-      아래 형식으로 img 하나 더 추가
+      마지막 이미지에서 오른쪽 클릭
+      → 다음 프로젝트
 
+      이미지 추가 시:
       <img
         src="pyomain03.jpg"
         alt="Closit image 3"
         class="project-image"
       >
 
-      그리고 위 data-images도
-      "Image 03" 추가
+      data-images에도 캡션 추가
       ===================================================== -->
 
       <div class="frame image-frame" data-index="0">
 
-        <!-- 첫 번째 이미지 -->
         <img
           src="pyomain01.jpg"
           alt="Closit image 1"
           class="project-image active"
         >
 
-        <!-- 두 번째 이미지 -->
         <img
           src="pyomain02.jpeg"
           alt="Closit image 2"
@@ -668,7 +617,7 @@ data-images:
         >
 
         <div class="frame-hint">
-          Click to advance →
+          ← Previous · Next →
         </div>
 
       </div>
@@ -694,30 +643,6 @@ data-images:
 
 <!-- =========================================================
 [C. PROJECT 02]
-
-현재 Placeholder 상태입니다.
-
-실제 이미지로 바꾸려면:
-
-<div class="frame image-frame" data-index="0">
-
-  <img
-    src="project02-1.jpg"
-    alt="WAI image 1"
-    class="project-image active"
-  >
-
-  <img
-    src="project02-2.jpg"
-    alt="WAI image 2"
-    class="project-image"
-  >
-
-  <div class="frame-hint">
-    Click to advance →
-  </div>
-
-</div>
 ========================================================= -->
 
 <section
@@ -801,7 +726,7 @@ data-images:
         </div>
 
         <div class="frame-hint">
-          Click to advance →
+          ← Previous · Next →
         </div>
 
       </div>
@@ -908,7 +833,7 @@ data-images:
         </div>
 
         <div class="frame-hint">
-          Click to advance →
+          ← Previous · Next →
         </div>
 
       </div>
@@ -1028,167 +953,465 @@ sections.forEach(
 
 
 /* =========================================================
-[3. 프로젝트 이미지 클릭]
+[3. 프로젝트 이미지 양방향 이동]
 
-실제 이미지가 있는 경우:
+오른쪽 절반 클릭:
+→ 다음 이미지
+→ 마지막 이미지에서는 다음 프로젝트
 
-1번 이미지 클릭
-→ 2번 이미지
+왼쪽 절반 클릭:
+→ 이전 이미지
+→ 첫 이미지에서는 이전 프로젝트
 
-2번 이미지 클릭
-→ 다음 프로젝트
-
-3장이면
-1 → 2 → 3 → 다음 프로젝트
-
-Placeholder 프로젝트는 기존처럼
-data-images 캡션만 바뀝니다.
+이전 프로젝트로 이동할 때:
+→ 이전 프로젝트의 마지막 이미지부터 보여줌
 ========================================================= */
 
-document
-  .querySelectorAll('.project')
-  .forEach((section,i)=>{
 
-    const captions =
-      JSON.parse(section.dataset.images || '[]');
+/* =========================================================
+프로젝트의 특정 이미지 번호 표시
+========================================================= */
+
+function setProjectIndex(section,index){
+
+  const captions =
+    JSON.parse(
+      section.dataset.images || '[]'
+    );
+
+  const frame =
+    section.querySelector('.frame');
+
+  if(!frame) return;
+
+
+  const projectImages =
+    Array.from(
+      section.querySelectorAll('.project-image')
+    );
+
+
+  const capText =
+    section.querySelector('.cap-text');
+
+  const capPage =
+    section.querySelector('.cap-page');
+
+
+  /* 실제 이미지 프로젝트 */
+
+  if(projectImages.length > 0){
+
+    const safeIndex =
+      Math.max(
+        0,
+        Math.min(
+          index,
+          projectImages.length - 1
+        )
+      );
+
+
+    projectImages.forEach(
+      (img,imgIndex)=>{
+
+        img.classList.toggle(
+          'active',
+          imgIndex === safeIndex
+        );
+
+      }
+    );
+
+
+    frame.dataset.index =
+      safeIndex;
+
+
+    if(capText){
+
+      capText.textContent =
+        captions[safeIndex] ||
+        `Image ${String(safeIndex + 1).padStart(2,'0')}`;
+
+    }
+
+
+    if(capPage){
+
+      capPage.textContent =
+        `${safeIndex + 1}/${projectImages.length}`;
+
+    }
+
+  }
+
+
+  /* Placeholder 프로젝트 */
+
+  else{
+
+    const total =
+      Math.max(
+        captions.length,
+        1
+      );
+
+
+    const safeIndex =
+      Math.max(
+        0,
+        Math.min(
+          index,
+          total - 1
+        )
+      );
+
+
+    frame.dataset.index =
+      safeIndex;
+
+
+    if(
+      capText &&
+      captions.length > 0
+    ){
+
+      capText.textContent =
+        captions[safeIndex];
+
+    }
+
+
+    if(capPage){
+
+      capPage.textContent =
+        `${safeIndex + 1}/${total}`;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+프로젝트의 이미지 개수 확인
+========================================================= */
+
+function getProjectTotal(section){
+
+  const projectImages =
+    section.querySelectorAll(
+      '.project-image'
+    );
+
+
+  if(projectImages.length > 0){
+
+    return projectImages.length;
+
+  }
+
+
+  const captions =
+    JSON.parse(
+      section.dataset.images || '[]'
+    );
+
+
+  return Math.max(
+    captions.length,
+    1
+  );
+
+}
+
+
+/* =========================================================
+프로젝트 클릭 이벤트
+========================================================= */
+
+const projectSections =
+  Array.from(
+    document.querySelectorAll('.project')
+  );
+
+
+projectSections.forEach(
+  (section,i)=>{
 
     const frame =
       section.querySelector('.frame');
 
     if(!frame) return;
 
-    const projectImages =
-      Array.from(
-        section.querySelectorAll('.project-image')
-      );
 
-    const capText =
-      section.querySelector('.cap-text');
-
-    const capPage =
-      section.querySelector('.cap-page');
+    frame.addEventListener(
+      'click',
+      (event)=>{
 
 
-    frame.addEventListener('click',()=>{
+        /* 클릭한 위치 계산 */
 
-      let idx =
-        parseInt(
-          frame.dataset.index || '0',
-          10
-        );
+        const rect =
+          frame.getBoundingClientRect();
 
-
-      /* =====================================
-      실제 이미지가 들어간 프로젝트
-      ===================================== */
-
-      if(projectImages.length > 0){
-
-        if(idx < projectImages.length - 1){
-
-          projectImages[idx]
-            .classList.remove('active');
-
-          idx += 1;
-
-          projectImages[idx]
-            .classList.add('active');
-
-          frame.dataset.index = idx;
+        const clickX =
+          event.clientX - rect.left;
 
 
-          if(capText){
+        /*
+        왼쪽 절반인지 확인
+        */
 
-            capText.textContent =
-              captions[idx] ||
-              `Image ${String(idx + 1).padStart(2,'0')}`;
+        const clickedLeft =
+          clickX < rect.width / 2;
+
+
+        let idx =
+          parseInt(
+            frame.dataset.index || '0',
+            10
+          );
+
+
+        const total =
+          getProjectTotal(section);
+
+
+
+        /* =====================================================
+        왼쪽 클릭
+        ===================================================== */
+
+        if(clickedLeft){
+
+
+          /* 현재 프로젝트 내 이전 사진 */
+
+          if(idx > 0){
+
+            idx -= 1;
+
+            setProjectIndex(
+              section,
+              idx
+            );
+
+            return;
 
           }
 
 
-          if(capPage){
+          /* =============================================
+          첫 번째 사진에서 왼쪽 클릭
+          → 이전 프로젝트
+          ============================================= */
 
-            capPage.textContent =
-              `${idx+1}/${projectImages.length}`;
+          const previous =
+            projectSections[i - 1];
+
+
+          if(previous){
+
+            const previousTotal =
+              getProjectTotal(previous);
+
+
+            /*
+            이전 프로젝트 마지막 사진으로 설정
+            */
+
+            setProjectIndex(
+              previous,
+              previousTotal - 1
+            );
+
+
+            previous.scrollIntoView({
+              behavior:'smooth',
+              block:'start'
+            });
 
           }
+
+
+          /*
+          첫 번째 프로젝트의 첫 이미지에서
+          더 이전으로 가면 Information
+          */
+
+          else{
+
+            document
+              .getElementById('p00')
+              .scrollIntoView({
+                behavior:'smooth',
+                block:'start'
+              });
+
+          }
+
 
           return;
 
         }
 
-      }
 
 
-      /* =====================================
-      Placeholder 프로젝트
-      ===================================== */
+        /* =====================================================
+        오른쪽 클릭
+        ===================================================== */
 
-      else if(captions.length > 0){
 
-        if(idx < captions.length - 1){
+        /* 현재 프로젝트 내 다음 사진 */
+
+        if(idx < total - 1){
 
           idx += 1;
 
-          frame.dataset.index = idx;
-
-
-          if(capText){
-
-            capText.textContent =
-              captions[idx];
-
-          }
-
-
-          if(capPage){
-
-            capPage.textContent =
-              `${idx+1}/${captions.length}`;
-
-          }
+          setProjectIndex(
+            section,
+            idx
+          );
 
           return;
 
         }
 
-      }
+
+        /* =============================================
+        마지막 사진에서 오른쪽 클릭
+        → 다음 프로젝트
+        ============================================= */
+
+        const next =
+          projectSections[i + 1];
 
 
-      /* =====================================
-      마지막 이미지 클릭 → 다음 프로젝트
-      ===================================== */
+        if(next){
 
-      const projectSections =
-        document.querySelectorAll('.project');
+          /*
+          다음 프로젝트는 첫 사진으로 초기화
+          */
 
-      const next =
-        projectSections[i+1];
+          setProjectIndex(
+            next,
+            0
+          );
 
 
-      if(next){
-
-        next.scrollIntoView({
-          behavior:'smooth',
-          block:'start'
-        });
-
-      }
-
-      else{
-
-        document
-          .getElementById('p00')
-          .scrollIntoView({
+          next.scrollIntoView({
             behavior:'smooth',
             block:'start'
           });
 
+        }
+
+
+        /*
+        마지막 프로젝트에서 오른쪽 클릭
+        → Information
+        */
+
+        else{
+
+          document
+            .getElementById('p00')
+            .scrollIntoView({
+              behavior:'smooth',
+              block:'start'
+            });
+
+        }
+
       }
 
-    });
+    );
 
-  });
+
+    /* =====================================================
+    마우스 위치에 따라 커서 방향 변경
+
+    왼쪽 = ← 느낌
+    오른쪽 = → 느낌
+    ===================================================== */
+
+    frame.addEventListener(
+      'mousemove',
+      (event)=>{
+
+        const rect =
+          frame.getBoundingClientRect();
+
+        const clickX =
+          event.clientX - rect.left;
+
+
+        if(
+          clickX <
+          rect.width / 2
+        ){
+
+          frame.style.cursor =
+            'w-resize';
+
+        }
+
+        else{
+
+          frame.style.cursor =
+            'e-resize';
+
+        }
+
+      }
+
+    );
+
+
+    frame.addEventListener(
+      'mouseleave',
+      ()=>{
+
+        frame.style.cursor =
+          'pointer';
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+초기 이미지 상태 정리
+========================================================= */
+
+projectSections.forEach(
+  section=>{
+
+    const frame =
+      section.querySelector('.frame');
+
+    if(!frame) return;
+
+
+    const initialIndex =
+      parseInt(
+        frame.dataset.index || '0',
+        10
+      );
+
+
+    setProjectIndex(
+      section,
+      initialIndex
+    );
+
+  }
+);
 
 </script>
 
