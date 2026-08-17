@@ -6,7 +6,6 @@
 
 <!-- =========================================================
 [1. 브라우저 탭 제목 수정]
-아래 Aïre Studio — Selected Works 부분을 원하는 사이트명으로 변경
 ========================================================= -->
 <title>Seoyeon Pyo — Selected Works</title>
 
@@ -41,10 +40,8 @@
     font-family:'Inter', -apple-system, sans-serif;
   }
 
-
   /* =========================================================
   왼쪽 사이드바 디자인
-  보통 콘텐츠만 바꿀 경우 여기 CSS는 수정하지 않아도 됩니다.
   ========================================================= */
 
   .sidebar{
@@ -121,7 +118,6 @@
   #clock{
     min-width:60px;
   }
-
 
   /* =========================================================
   메인 콘텐츠 영역
@@ -208,7 +204,6 @@
     margin-bottom:30px;
   }
 
-
   /* =========================================================
   이미지 영역
   ========================================================= */
@@ -263,6 +258,7 @@
     color:var(--muted-2);
     opacity:0;
     transition:opacity .2s;
+    z-index:2;
   }
 
   .frame:hover .frame-hint{
@@ -279,32 +275,53 @@
     max-width:460px;
   }
 
-
   /* =========================================================
-  실제 이미지를 사용할 경우
+  실제 이미지 여러 장 넣기
 
-  아래처럼 HTML에 넣으면 됩니다.
+  예:
 
-  <div class="frame image-frame">
-    <img src="images/project01.jpg" alt="프로젝트 이미지">
+  <div class="frame image-frame" data-index="0">
+
+    <img
+      src="pyomain01.jpg"
+      alt="Closit image 1"
+      class="project-image active"
+    >
+
+    <img
+      src="pyomain02.jpg"
+      alt="Closit image 2"
+      class="project-image"
+    >
+
+    <div class="frame-hint">
+      Click to advance →
+    </div>
+
   </div>
 
-  추천 폴더 구조:
-
-  portfolio.html
-  images/
-    project01.jpg
-    project02.jpg
-    project03.jpg
+  중요:
+  - 첫 번째 이미지만 active 붙이기
+  - 두 번째부터는 active 없이 project-image만
+  - 이미지 3장, 4장도 같은 방식으로 계속 추가 가능
   ========================================================= */
 
-  .image-frame img{
-    width:100%;
-    height:100%;
-    display:block;
-    object-fit:cover;
+  .image-frame{
+    position:relative;
   }
 
+  .project-image{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:none;
+  }
+
+  .project-image.active{
+    display:block;
+  }
 
   /* =========================================================
   Information 페이지
@@ -340,7 +357,6 @@
     color:var(--accent);
     border-color:var(--accent);
   }
-
 
   /* =========================================================
   모바일 버전
@@ -389,21 +405,17 @@
 
 <body>
 
-
 <!-- =========================================================
 콘텐츠 수정 핵심 가이드
-
-거의 아래 HTML 부분만 수정하면 됩니다.
 
 1. 사이트 이름
 2. 왼쪽 메뉴
 3. Information 소개
-4. 각 프로젝트 제목
-5. 프로젝트 연도 / 재료 / 분야
+4. 프로젝트 제목
+5. 프로젝트 정보
 6. 프로젝트 설명
 7. 이미지
 ========================================================= -->
-
 
 <!-- =========================================================
 [A. 왼쪽 메뉴]
@@ -418,7 +430,6 @@
       Pyo Studio
     </div>
 
-    <!-- 메뉴 제목 -->
     <div class="index-label">
       Index
     </div>
@@ -428,7 +439,7 @@
 
         <!--
         data-target="p01"은
-        아래 프로젝트의 id="p01"과 반드시 같아야 합니다.
+        아래 프로젝트의 id="p01"과 같아야 합니다.
         -->
 
         <li>
@@ -459,22 +470,17 @@
           </button>
         </li>
 
-        
       </ul>
     </nav>
 
   </div>
 
-
-  <!-- 왼쪽 아래 -->
   <div class="sidebar-footer">
 
-    <!-- 현재 시간 자동 표시 -->
     <span id="clock">
       00:00:00
     </span>
 
-    <!-- 아래 문구 수정 가능 -->
     <span>
       Pyo Studio — Selected Works
     </span>
@@ -484,12 +490,10 @@
 </aside>
 
 
-
 <main class="main" id="main">
 
-
 <!-- =========================================================
-[B. INFORMATION / ABOUT 페이지]
+[B. INFORMATION]
 ========================================================= -->
 
 <section id="p00">
@@ -504,29 +508,21 @@
 
       <div class="content-head">
 
-        <!-- 제목 -->
         <div class="title-block">
           <h1>Information</h1>
         </div>
 
-        <!-- 오른쪽 분류 -->
         <div class="pub-label">
           Studio
         </div>
 
       </div>
 
-
-      <!--
-      소개글
-      아래 영어 문장을 통째로 원하는 소개글로 바꾸면 됩니다.
-      -->
       <div class="info-body">
 
         Seoyeon is interested in the small yet meaningful moments found within everyday life. By observing posture, repetitive behaviours, interactions with objects, and traces left within a space, she explores how ordinary situations shape emotional experience. For her, design extends beyond functional problem-solving; it can offer a way to recognise and communicate emotions that are difficult to articulate. Her personal and cultural experiences provide an important lens through which she interprets these moments.
 
       </div>
-
 
       <div class="info-profile">
 
@@ -534,26 +530,14 @@
           Contact
         </h3>
 
-
-        <!--
-        이메일 변경 시
-        href와 화면에 보이는 주소 둘 다 수정
-        -->
-
+        <!-- 이메일: href와 보이는 주소 둘 다 수정 -->
         <div>
-          <a href="mailto:studio@airestudio.example">
+          <a href="mailto:10069268@network.rca.ac.uk">
             10069268@network.rca.ac.uk
           </a>
         </div>
 
-
-        <!--
-        href="#" 부분을 실제 인스타 링크로 변경
-
-        예:
-        href="https://instagram.com/username"
-        -->
-
+        <!-- # 부분에 실제 Instagram 주소 넣기 -->
         <div>
           <a href="#">
             Instagram — @py0seon
@@ -569,30 +553,22 @@
 </section>
 
 
-
 <!-- =========================================================
-[C. PROJECT 01]
+[C. PROJECT 01 — CLOSIT]
 
-아래 항목만 바꾸면 됩니다.
+data-images:
+실제 이미지 아래에 표시되는 캡션입니다.
 
-프로젝트 제목
-프로젝트 종류
-이름
-분야
-연도
-크기
-재료
-설명
-이미지 캡션
+이미지 2장이면 캡션도 2개,
+3장이면 3개 넣는 것을 추천합니다.
 ========================================================= -->
 
 <section
   id="p01"
   class="project"
-
   data-images='[
-    "Cover, cloth-bound edition",
-    "Interior spread, section opener"
+    "Image 01",
+    "Image 02"
   ]'
 >
 
@@ -604,28 +580,22 @@
 
     <div class="section-content">
 
-
       <div class="content-head">
 
-        <!-- 프로젝트 제목 -->
         <div class="title-block">
           <h1>
             Closit
           </h1>
         </div>
 
-        <!-- 프로젝트 종류 -->
         <div class="pub-label">
           2026 RCA GRADSHOW
         </div>
 
       </div>
 
-
       <div class="meta-row">
 
-
-        <!-- 왼쪽 프로젝트 정보 -->
         <div class="meta-col">
 
           Furniture
@@ -637,18 +607,6 @@
           Cherry wood, Aluminium
 
         </div>
-
-
-        <!--
-        오른쪽 프로젝트 정보
-
-        ISBN일 필요 없습니다.
-
-        예:
-        Mycelium composite
-        320 × 320 × 390 mm
-        London, 2026
-        -->
 
         <div class="meta-col right">
 
@@ -664,32 +622,57 @@
 
       </div>
 
-
-      <!-- 프로젝트 설명 -->
       <div class="desc">
 
         Closit explores how everyday rituals can shape emotional wellbeing. By transforming the repetitive act of folding clothes into a deliberate interaction, the project reframes a familiar domestic habit as a moment of reflection rather than a task to be completed. Instead of concealing the accumulation of clothing, the furniture makes it visible, revealing how ordinary objects can quietly record our routines, emotions, and patterns of living. Closit proposes furniture not simply as functional equipment, but as a medium that encourages more mindful relationships with ourselves and our everyday environment.
 
       </div>
 
-
       <!-- =====================================================
-      현재는 이미지 Placeholder입니다.
+      프로젝트 01 이미지
 
-      실제 이미지 한 장을 넣고 싶으면
-      아래 frame 전체를 지우고 이 코드로 교체:
+      이미지 2장:
+      pyomain01.jpg
+      pyomain02.jpg
 
-      <div class="frame image-frame">
-        <img src="images/project01.jpg" alt="Marrow">
-      </div>
+      이미지 한 장만 사용:
+      두 번째 img 삭제
 
+      이미지 3장 사용:
+      아래 형식으로 img 하나 더 추가
+
+      <img
+        src="pyomain03.jpg"
+        alt="Closit image 3"
+        class="project-image"
+      >
+
+      그리고 위 data-images도
+      "Image 03" 추가
       ===================================================== -->
 
-        <div class="frame image-frame">
-        <img src="pyomain01.jpg" alt="Marrow">
+      <div class="frame image-frame" data-index="0">
+
+        <!-- 첫 번째 이미지 -->
+        <img
+          src="pyomain01.jpg"
+          alt="Closit image 1"
+          class="project-image active"
+        >
+
+        <!-- 두 번째 이미지 -->
+        <img
+          src="pyomain02.jpg"
+          alt="Closit image 2"
+          class="project-image"
+        >
+
+        <div class="frame-hint">
+          Click to advance →
+        </div>
+
       </div>
 
-      <!-- 이미지 아래 캡션 -->
       <div class="caption-line">
 
         <span class="cap-page">
@@ -697,7 +680,7 @@
         </span>
 
         <span class="cap-text">
-          Cover, cloth-bound edition
+          Image 01
         </span>
 
       </div>
@@ -709,9 +692,32 @@
 </section>
 
 
-
 <!-- =========================================================
 [C. PROJECT 02]
+
+현재 Placeholder 상태입니다.
+
+실제 이미지로 바꾸려면:
+
+<div class="frame image-frame" data-index="0">
+
+  <img
+    src="project02-1.jpg"
+    alt="WAI image 1"
+    class="project-image active"
+  >
+
+  <img
+    src="project02-2.jpg"
+    alt="WAI image 2"
+    class="project-image"
+  >
+
+  <div class="frame-hint">
+    Click to advance →
+  </div>
+
+</div>
 ========================================================= -->
 
 <section
@@ -745,7 +751,6 @@
 
       </div>
 
-
       <div class="meta-row">
 
         <div class="meta-col">
@@ -759,7 +764,6 @@
           2019
 
         </div>
-
 
         <div class="meta-col right">
 
@@ -775,7 +779,6 @@
 
       </div>
 
-
       <div class="desc">
 
         A photographic survey of a single estuary shot over four years.
@@ -789,14 +792,12 @@
 
       </div>
 
-
       <div class="frame" data-index="0">
 
-        <div class="frame-inner">
-        </div>
+        <div class="frame-inner"></div>
 
         <div class="frame-caption">
-          Aïre Studio Placeholder Image · airestudio.example
+          Placeholder Image
         </div>
 
         <div class="frame-hint">
@@ -804,7 +805,6 @@
         </div>
 
       </div>
-
 
       <div class="caption-line">
 
@@ -823,7 +823,6 @@
   </div>
 
 </section>
-
 
 
 <!-- =========================================================
@@ -861,7 +860,6 @@
 
       </div>
 
-
       <div class="meta-row">
 
         <div class="meta-col">
@@ -875,7 +873,6 @@
           2023
 
         </div>
-
 
         <div class="meta-col right">
 
@@ -891,7 +888,6 @@
 
       </div>
 
-
       <div class="desc">
 
         A bilingual essay collection on musical silence.
@@ -903,14 +899,12 @@
 
       </div>
 
-
       <div class="frame" data-index="0">
 
-        <div class="frame-inner">
-        </div>
+        <div class="frame-inner"></div>
 
         <div class="frame-caption">
-          Aïre Studio Placeholder Image · airestudio.example
+          Placeholder Image
         </div>
 
         <div class="frame-hint">
@@ -918,7 +912,6 @@
         </div>
 
       </div>
-
 
       <div class="caption-line">
 
@@ -938,355 +931,13 @@
 
 </section>
 
-
-
-<!-- =========================================================
-[C. PROJECT 04]
-========================================================= -->
-
-<section
-  id="p04"
-  class="project"
-  data-images='[
-    "Cover, risograph",
-    "Field notes appendix"
-  ]'
->
-
-  <div class="section-row">
-
-    <div class="num">
-      04.
-    </div>
-
-    <div class="section-content">
-
-      <div class="content-head">
-
-        <div class="title-block">
-          <h1>
-            Static Bloom
-          </h1>
-        </div>
-
-        <div class="pub-label">
-          Publication
-        </div>
-
-      </div>
-
-
-      <div class="meta-row">
-
-        <div class="meta-col">
-
-          Renata Oyelaran
-          <br>
-
-          Poetry / English
-          <br>
-
-          2022
-
-        </div>
-
-
-        <div class="meta-col right">
-
-          ISBN: 979-8-6116-0052
-          <br>
-
-          135 × 200 mm
-          <br>
-
-          88 pp. Saddle-stitch
-
-        </div>
-
-      </div>
-
-
-      <div class="desc">
-
-        A chapbook printed in two-color risograph,
-        treating registration drift as part of the visual language
-        rather than an error to correct.
-
-      </div>
-
-
-      <div class="frame" data-index="0">
-
-        <div class="frame-inner">
-        </div>
-
-        <div class="frame-caption">
-          Aïre Studio Placeholder Image · airestudio.example
-        </div>
-
-        <div class="frame-hint">
-          Click to advance →
-        </div>
-
-      </div>
-
-
-      <div class="caption-line">
-
-        <span class="cap-page">
-          1/2
-        </span>
-
-        <span class="cap-text">
-          Cover, risograph
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================================================
-[C. PROJECT 05]
-========================================================= -->
-
-<section
-  id="p05"
-  class="project"
-  data-images='[
-    "Cover, debossed board",
-    "Fold-out plate"
-  ]'
->
-
-  <div class="section-row">
-
-    <div class="num">
-      05.
-    </div>
-
-    <div class="section-content">
-
-      <div class="content-head">
-
-        <div class="title-block">
-          <h1>
-            Ferrous
-          </h1>
-        </div>
-
-        <div class="pub-label">
-          Publication
-        </div>
-
-      </div>
-
-
-      <div class="meta-row">
-
-        <div class="meta-col">
-
-          Théo Lindqvist
-          <br>
-
-          Art monograph / English &amp; French
-          <br>
-
-          2020
-
-        </div>
-
-
-        <div class="meta-col right">
-
-          ISBN: 979-8-6116-0069
-          <br>
-
-          220 × 280 mm
-          <br>
-
-          176 pp. Hardcover
-
-        </div>
-
-      </div>
-
-
-      <div class="desc">
-
-        A monograph on rust and oxidation
-        as sculptural material.
-
-        The cover board is deep-debossed rather than printed,
-        so the title only reads under raking light.
-
-      </div>
-
-
-      <div class="frame" data-index="0">
-
-        <div class="frame-inner">
-        </div>
-
-        <div class="frame-caption">
-          Aïre Studio Placeholder Image · airestudio.example
-        </div>
-
-        <div class="frame-hint">
-          Click to advance →
-        </div>
-
-      </div>
-
-
-      <div class="caption-line">
-
-        <span class="cap-page">
-          1/2
-        </span>
-
-        <span class="cap-text">
-          Cover, debossed board
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================================================
-[C. PROJECT 06]
-========================================================= -->
-
-<section
-  id="p06"
-  class="project"
-  data-images='[
-    "Cover, uncoated stock",
-    "Closing spread"
-  ]'
->
-
-  <div class="section-row">
-
-    <div class="num">
-      06.
-    </div>
-
-    <div class="section-content">
-
-      <div class="content-head">
-
-        <div class="title-block">
-          <h1>
-            Half Light
-          </h1>
-        </div>
-
-        <div class="pub-label">
-          Publication
-        </div>
-
-      </div>
-
-
-      <div class="meta-row">
-
-        <div class="meta-col">
-
-          Priya Nakashima
-          <br>
-
-          Short fiction / English
-          <br>
-
-          2024
-
-        </div>
-
-
-        <div class="meta-col right">
-
-          ISBN: 979-8-6116-0076
-          <br>
-
-          135 × 216 mm
-          <br>
-
-          224 pp. Softcover
-
-        </div>
-
-      </div>
-
-
-      <div class="desc">
-
-        A story collection about dusk-shift workers,
-        set in a warm serif text face
-        at a slightly larger-than-usual size
-        for comfortable reading in low light.
-
-      </div>
-
-
-      <div class="frame" data-index="0">
-
-        <div class="frame-inner">
-        </div>
-
-        <div class="frame-caption">
-          Aïre Studio Placeholder Image · airestudio.example
-        </div>
-
-        <div class="frame-hint">
-          Click to advance →
-        </div>
-
-      </div>
-
-
-      <div class="caption-line">
-
-        <span class="cap-page">
-          1/2
-        </span>
-
-        <span class="cap-text">
-          Cover, uncoated stock
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
 </main>
-
 
 
 <script>
 
-
 /* =========================================================
 [1. 현재 시간]
-
-자동으로 현재 기기 시간을 표시합니다.
-수정할 필요 없음.
 ========================================================= */
 
 function tick(){
@@ -1306,11 +957,8 @@ tick();
 setInterval(tick,1000);
 
 
-
 /* =========================================================
 [2. 왼쪽 메뉴 클릭 → 해당 프로젝트 이동]
-
-수정할 필요 없음.
 ========================================================= */
 
 const navButtons =
@@ -1322,7 +970,6 @@ const sections =
   Array.from(
     document.querySelectorAll('section')
   );
-
 
 navButtons.forEach(btn=>{
 
@@ -1340,9 +987,8 @@ navButtons.forEach(btn=>{
 });
 
 
-
 /* =========================================================
-스크롤할 때 현재 프로젝트 메뉴 활성화
+스크롤 시 현재 프로젝트 메뉴 활성화
 ========================================================= */
 
 const observer =
@@ -1376,120 +1022,173 @@ const observer =
 
   );
 
-
 sections.forEach(
   s=>observer.observe(s)
 );
 
 
-
 /* =========================================================
-[3. Placeholder 클릭]
+[3. 프로젝트 이미지 클릭]
 
-각 프로젝트의
+실제 이미지가 있는 경우:
 
-data-images='[
- "이미지 설명 1",
- "이미지 설명 2"
-]'
+1번 이미지 클릭
+→ 2번 이미지
 
-내용을 순서대로 표시합니다.
+2번 이미지 클릭
+→ 다음 프로젝트
 
-마지막 캡션까지 클릭하면
-다음 프로젝트로 이동합니다.
+3장이면
+1 → 2 → 3 → 다음 프로젝트
+
+Placeholder 프로젝트는 기존처럼
+data-images 캡션만 바뀝니다.
 ========================================================= */
 
 document
   .querySelectorAll('.project')
   .forEach((section,i)=>{
 
-
-    const images =
-      JSON.parse(
-        section.dataset.images
-      );
-
+    const captions =
+      JSON.parse(section.dataset.images || '[]');
 
     const frame =
       section.querySelector('.frame');
 
+    if(!frame) return;
+
+    const projectImages =
+      Array.from(
+        section.querySelectorAll('.project-image')
+      );
 
     const capText =
       section.querySelector('.cap-text');
-
 
     const capPage =
       section.querySelector('.cap-page');
 
 
-    frame.addEventListener(
-      'click',
-      ()=>{
+    frame.addEventListener('click',()=>{
+
+      let idx =
+        parseInt(
+          frame.dataset.index || '0',
+          10
+        );
 
 
-        let idx =
-          parseInt(
-            frame.dataset.index,
-            10
-          );
+      /* =====================================
+      실제 이미지가 들어간 프로젝트
+      ===================================== */
 
+      if(projectImages.length > 0){
 
-        if(idx < images.length - 1){
+        if(idx < projectImages.length - 1){
+
+          projectImages[idx]
+            .classList.remove('active');
 
           idx += 1;
 
+          projectImages[idx]
+            .classList.add('active');
+
           frame.dataset.index = idx;
 
-          capText.textContent =
-            images[idx];
 
-          capPage.textContent =
-            `${idx+1}/${images.length}`;
+          if(capText){
 
-        }
-
-
-        else{
-
-          const projectSections =
-            document.querySelectorAll(
-              '.project'
-            );
-
-
-          const next =
-            projectSections[i+1];
-
-
-          if(next){
-
-            next.scrollIntoView({
-              behavior:'smooth',
-              block:'start'
-            });
+            capText.textContent =
+              captions[idx] ||
+              `Image ${String(idx + 1).padStart(2,'0')}`;
 
           }
 
 
-          else{
+          if(capPage){
 
-            document
-              .getElementById('p00')
-              .scrollIntoView({
-                behavior:'smooth',
-                block:'start'
-              });
+            capPage.textContent =
+              `${idx+1}/${projectImages.length}`;
 
           }
+
+          return;
 
         }
 
       }
 
-    );
+
+      /* =====================================
+      Placeholder 프로젝트
+      ===================================== */
+
+      else if(captions.length > 0){
+
+        if(idx < captions.length - 1){
+
+          idx += 1;
+
+          frame.dataset.index = idx;
+
+
+          if(capText){
+
+            capText.textContent =
+              captions[idx];
+
+          }
+
+
+          if(capPage){
+
+            capPage.textContent =
+              `${idx+1}/${captions.length}`;
+
+          }
+
+          return;
+
+        }
+
+      }
+
+
+      /* =====================================
+      마지막 이미지 클릭 → 다음 프로젝트
+      ===================================== */
+
+      const projectSections =
+        document.querySelectorAll('.project');
+
+      const next =
+        projectSections[i+1];
+
+
+      if(next){
+
+        next.scrollIntoView({
+          behavior:'smooth',
+          block:'start'
+        });
+
+      }
+
+      else{
+
+        document
+          .getElementById('p00')
+          .scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+          });
+
+      }
+
+    });
 
   });
-
 
 </script>
 
